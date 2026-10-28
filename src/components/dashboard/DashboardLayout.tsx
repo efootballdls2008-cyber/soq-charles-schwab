@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import DashboardSidebar from './DashboardSidebar'
 import DashboardHeader from './DashboardHeader'
+import SupportWidget from '../ui/SupportWidget'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -33,6 +34,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <DashboardHeader onMenuClick={() => setSidebarOpen((o) => !o)} />
         {children}
       </div>
+
+      {/* Support widget — fixed bottom-right on all dashboard pages */}
+      <SupportWidget />
     </div>
   )
 }

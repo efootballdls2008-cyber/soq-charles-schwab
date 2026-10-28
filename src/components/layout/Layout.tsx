@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 import TickerTape from './TickerTape'
+import SupportWidget from '../ui/SupportWidget'
 
 export default function Layout() {
   return (
@@ -28,6 +29,9 @@ export default function Layout() {
 
       {/* Sticky bottom ticker — rendered outside <main> so it overlays the footer edge */}
       <TickerTape />
+
+      {/* Support widget — fixed bottom-right on all pages */}
+      <SupportWidget />
     </div>
   )
 }
