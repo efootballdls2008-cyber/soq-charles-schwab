@@ -235,7 +235,7 @@ export default function SupportWidget() {
                           placeholder="Your name"
                           required
                           className="w-full rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 transition"
-                          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', focusRingColor: '#a28539' }}
+                          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}
                         />
                       </div>
                       <div>
