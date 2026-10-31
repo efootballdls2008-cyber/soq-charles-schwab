@@ -10,7 +10,7 @@ import type { BotTrade } from '../hooks/useAlgorithmEngine'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type ProfitPeriod = 'Today' | 'This Week' | 'This Month' | 'All Time'
+export type ProfitPeriod = 'Today' | 'This Week' | 'This Month' | 'This Year' | 'All Time'
 
 export interface ProfitDataPoint {
   day: string
@@ -70,6 +70,9 @@ function isInPeriod(dateStr: string | null | undefined, period: ProfitPeriod): b
       case 'This Month': {
         return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()
       }
+      case 'This Year': {
+        return d.getFullYear() === now.getFullYear()
+      }
       case 'All Time': {
         return true
       }
@@ -120,7 +123,7 @@ export function computeAllPeriodProfit(
   botTrades: BotTrade[],
   tradeHistory: ProfitTradeHistoryRow[]
 ): ComputedProfitOverview[] {
-  const periods: ProfitPeriod[] = ['Today', 'This Week', 'This Month', 'All Time']
+  const periods: ProfitPeriod[] = ['Today', 'This Week', 'This Month', 'This Year', 'All Time']
   const userId = botTrades[0]?.userId ?? tradeHistory[0]?.userId ?? 0
 
   return periods.map(period => {
@@ -167,20 +170,33 @@ export function computeAllPeriodProfit(
 
 // ─── Formatting Helpers ───────────────────────────────────────────────────────
 
-export function formatSignedAmount(amount: number, currencySymbol = '$'): string {
+export function formatSignedAmount(
+  amount: number, 
+  currencySymbol = '$',
+  options?: { includePct?: number }
+): string {
   const abs = Math.abs(amount)
   const formatted = abs.toLocaleString('en-US', { 
     minimumFractionDigits: 2, 
     maximumFractionDigits: 2 
   })
   
+  let result = ''
   if (amount > 0) {
-    return `+${currencySymbol}${formatted}`
+    result = `+${currencySymbol}${formatted}`
   } else if (amount < 0) {
-    return `-${currencySymbol}${formatted}`
+    result = `-${currencySymbol}${formatted}`
   } else {
-    return `${currencySymbol}${formatted}`
+    result = `${currencySymbol}${formatted}`
   }
+
+  // Append percentage if provided
+  if (options?.includePct !== undefined) {
+    const pctFormatted = options.includePct.toFixed(2)
+    result += ` (${options.includePct >= 0 ? '+' : ''}${pctFormatted}%)`
+  }
+
+  return result
 }
 
 export function formatPnlPct(pnl: number, balance: number): number {
